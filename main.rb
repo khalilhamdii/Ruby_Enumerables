@@ -1,13 +1,12 @@
 # rubocop:disable Style/CaseEquality
 
 module Enumerable
-
   # 1 - my_each code
 
   def my_each
     input_arr = [*self]
     input_length = input_arr.length
-    for j in 0...input_length
+    (0...input_length).each do |j|
       yield(input_arr[j])
     end
   end
@@ -17,7 +16,7 @@ module Enumerable
   def my_each_with_index
     input_arr = [*self]
     input_length = input_arr.length
-    for j in 0...input_length
+    (0...input_length).each do |j|
       yield(input_arr[j], j)
     end
   end
@@ -28,122 +27,113 @@ module Enumerable
     selected_arr = []
     my_each do |item|
       next unless yield(item)
+
       selected_arr.push(item)
     end
-  selected_arr
+    selected_arr
   end
 
   # 4 - my_all? code
 
-  def my_all?(condition=false)
-
+  def my_all?(condition = nil)
     my_each do |item|
       if block_given?
-        unless yield(item)
-          return false
-        end
+        return false unless yield(item)
       elsif condition.class == Class
-        unless item.is_a?(condition)
-          return false
-        end
+        return false unless item.is_a?(condition)
       elsif condition.class == Regexp
-        unless item.match(condition)
-          return false
-        end
+        return false unless item.match(condition)
       elsif !item
         return false
       end
     end
-      true
-    end
+    true
+  end
 
   # 5 - my_any? code
 
-  def my_any?(condition=false)
-
+  def my_any?(condition = nil)
     my_each do |item|
       if block_given?
-        if yield(item)
-          return true
-        end
+        return true if yield(item)
       elsif condition.class == Class
-        if item.is_a?(condition)
-          return true
-        end
+        return true if item.is_a?(condition)
       elsif condition.class == Regexp
-        if item.match(condition)
-          return true
-        end
+        return true if item.match(condition)
       elsif item
         return true
       end
     end
-      false
-    end
+    false
+  end
 
   # 6 - my_none? code
 
-  def my_none?(condition=false)
-
+  def my_none?(condition = nil)
     my_each do |item|
       if block_given?
-        if yield(item)
-          return false
-        end
+        return false if yield(item)
       elsif condition.class == Class
-        if item.is_a?(condition)
-          return false
-        end
+        return false if item.is_a?(condition)
       elsif condition.class == Regexp
-        if item.match(condition)
-          return false
-        end
+        return false if item.match(condition)
       elsif item
         return false
       end
     end
-      true
-    end
+    true
+  end
 
   # 7 - my_count code
 
-  def my_count(counter=false)
-  temp_arr = []
-  if counter
-    temp_arr = my_select { |item| item == counter}
-    return temp_arr.length
-  elsif block_given?
-    temp_arr = my_select { |item| yield(item)}
-    return temp_arr.length
-  end
-  length
+  def my_count(condition = nil)
+    if counter
+      temp_arr = my_select { |item| item == counter }
+      return temp_arr.length
+    elsif block_given?
+      temp_arr = my_select { |item| yield(item) }
+      return temp_arr.length
+    end
+    length
   end
 
-   # 8 - my_map code
+  # 8 - my_map code
 
-def my_map
-  new_arr = []
-  my_each_with_index do |item,index|
-    new_arr.push(yield(item,index))
+  def my_map(random_proc = nil)
+    new_arr = []
+    my_each_with_index do |item, index|
+      if block_given?
+        new_arr.push(yield(item, index))
+      else
+        new_arr.push(random_proc.call(item, index))
+      end
+    end
+    new_arr
   end
-  new_arr
+
+  # 9 - my_inject code
+
+  def my_inject(result = 0)
+    my_each do |item|
+      result = yield(result, item)
+    end
+    result
+  end
 end
 
+# 10 - multiply_els code
 
+def multiply_els(arr)
+  product = arr.my_inject(10) { |accumulator, element| accumulator * element }
 
-
-
-
-
-
+  product
 end
-
 
 # 1 *** my_each test
 
-#["A","B1","c","e","dad","eeeee"].my_each { |item| puts  item.length }
+# ["A","B1","c","e","dad","eeeee"].my_each { |item| puts  item.length }
 
-#2 ***my_each_with_index
+# 2 ***my_each_with_index
 
 # ["any","k","a","b","c","d","e"].my_each_with_index { |item,index|
 #   puts "#{item} : #{index}"
@@ -191,4 +181,14 @@ end
 
 # # 8 *** my_map test
 
-print (1..4).my_map { |i| i*i }      #=> [1, 4, 9, 16]
+# print(1..4).my_map { |i| i * i } #=> [1, 4, 9, 16]
+# random_proc = proc { |i| i * 2 }
+# print (1..4).my_map(random_proc) #=> [2, 4, 6, 8]
+
+# # 9 *** my_inject test
+
+# puts (5..10).my_inject { |sum, n| sum + n }            #=> 45
+
+# # 10 *** multiply_els test
+
+# puts multiply_els([2,4,5])
