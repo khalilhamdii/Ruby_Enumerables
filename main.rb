@@ -2,9 +2,9 @@
 
 module Enumerable
 
-   # 1 - my_each code
+  # 1 - my_each code
 
-   def my_each
+  def my_each
     input_arr = [*self]
     input_length = input_arr.length
     for j in 0...input_length
@@ -33,13 +33,13 @@ module Enumerable
   selected_arr
   end
 
-   # 4 - my_all? code
+  # 4 - my_all? code
 
-   def my_all?(condition=false)
+  def my_all?(condition=false)
 
     my_each do |item|
-      if block_given? 
-        unless yield(item) 
+      if block_given?
+        unless yield(item)
           return false
         end
       elsif condition.class == Class
@@ -57,13 +57,13 @@ module Enumerable
       true
     end
 
-  # 5 - my_any? code 
+  # 5 - my_any? code
 
   def my_any?(condition=false)
 
     my_each do |item|
-      if block_given? 
-        if yield(item) 
+      if block_given?
+        if yield(item)
           return true
         end
       elsif condition.class == Class
@@ -81,13 +81,13 @@ module Enumerable
       false
     end
 
-     # 6 - my_none? code  
+  # 6 - my_none? code
 
   def my_none?(condition=false)
 
     my_each do |item|
-      if block_given? 
-        if yield(item) 
+      if block_given?
+        if yield(item)
           return false
         end
       elsif condition.class == Class
@@ -104,6 +104,32 @@ module Enumerable
     end
       true
     end
+
+  # 7 - my_count code
+
+  def my_count(counter=false)
+  temp_arr = []
+  if counter
+    temp_arr = my_select { |item| item == counter}
+    return temp_arr.length
+  elsif block_given?
+    temp_arr = my_select { |item| yield(item)}
+    return temp_arr.length
+  end
+  length
+  end
+
+   # 8 - my_map code
+
+def my_map
+  new_arr = []
+  my_each_with_index do |item,index|
+    new_arr.push(yield(item,index))
+  end
+  new_arr
+end
+
+
 
 
 
@@ -155,3 +181,14 @@ end
 # puts [nil].my_none?                                        #=> true
 # puts [nil, false].my_none?                                 #=> true
 # puts [nil, false, true].my_none?                           #=> false
+
+# # 7 *** my_count? test
+
+# ary = [1, 2, 4, 2]
+# puts ary.my_count               #=> 4
+# puts ary.my_count(2)            #=> 2
+# puts ary.my_count{ |x| x%2==0 } #=> 3
+
+# # 8 *** my_map test
+
+print (1..4).my_map { |i| i*i }      #=> [1, 4, 9, 16]
