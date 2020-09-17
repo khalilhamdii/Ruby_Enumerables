@@ -1,6 +1,6 @@
 ## RUBY PROJECT N°2 : Enumerables
 
-</h1>This project is built using Ruby language.We created methods that work that same as Ruby enumerables such as : Each,Each_with_index,Select,all?,none,any?,count,map and inject.
+</h1>This project is built using the Ruby language. We created methods that work that same as Ruby enumerable such as ( Each, Each_with_index, Select, all?, none, any?, count, map and inject ).
 
 </h1>
 

@@ -1,5 +1,3 @@
-# rubocop:disable Style/CaseEquality
-
 module Enumerable
   # 1 - my_each code
 
@@ -35,7 +33,7 @@ module Enumerable
 
   # 4 - my_all? code
 
-  def my_all?(condition = nil)
+  def my_all?(condition = false)
     my_each do |item|
       if block_given?
         return false unless yield(item)
@@ -52,7 +50,7 @@ module Enumerable
 
   # 5 - my_any? code
 
-  def my_any?(condition = nil)
+  def my_any?(condition = false)
     my_each do |item|
       if block_given?
         return true if yield(item)
@@ -69,7 +67,7 @@ module Enumerable
 
   # 6 - my_none? code
 
-  def my_none?(condition = nil)
+  def my_none?(condition = false)
     my_each do |item|
       if block_given?
         return false if yield(item)
@@ -86,7 +84,7 @@ module Enumerable
 
   # 7 - my_count code
 
-  def my_count(condition = nil)
+  def my_count(counter = false)
     if counter
       temp_arr = my_select { |item| item == counter }
       return temp_arr.length
@@ -99,13 +97,13 @@ module Enumerable
 
   # 8 - my_map code
 
-  def my_map(random_proc = nil)
+  def my_map(proc = nil)
     new_arr = []
     my_each_with_index do |item, index|
       if block_given?
         new_arr.push(yield(item, index))
       else
-        new_arr.push(random_proc.call(item, index))
+        new_arr.push(proc.call(item, index))
       end
     end
     new_arr
@@ -181,7 +179,7 @@ end
 
 # # 8 *** my_map test
 
-# print(1..4).my_map { |i| i * i } #=> [1, 4, 9, 16]
+print (1..4).my_map { |i| i * i }#=> [1, 4, 9, 16]
 # random_proc = proc { |i| i * 2 }
 # print (1..4).my_map(random_proc) #=> [2, 4, 6, 8]
 
