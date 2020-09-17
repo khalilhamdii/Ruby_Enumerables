@@ -179,7 +179,7 @@ end
 
 # # 8 *** my_map test
 
-print (1..4).my_map { |i| i * i }#=> [1, 4, 9, 16]
+# print (1..4).my_map { |i| i * i }#=> [1, 4, 9, 16]
 # random_proc = proc { |i| i * 2 }
 # print (1..4).my_map(random_proc) #=> [2, 4, 6, 8]
 
