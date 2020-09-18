@@ -2,11 +2,17 @@ module Enumerable
   # 1 - my_each code
 
   def my_each
-    input_arr = [*self]
+    input_arr = *self
     input_length = input_arr.length
-    (0...input_length).each do |j|
-      yield(input_arr[j])
-    end
+    
+      unless block_given?
+       return to_enum(:my_each)
+      end
+
+        for j in 0...input_length
+          yield(input_arr[j])
+          end 
+    self    
   end
 
   # 2 - my_each_with_index
@@ -14,7 +20,7 @@ module Enumerable
   def my_each_with_index
     input_arr = [*self]
     input_length = input_arr.length
-    (0...input_length).each do |j|
+    for j in 0...input_length
       yield(input_arr[j], j)
     end
   end
@@ -129,7 +135,15 @@ end
 
 # 1 *** my_each test
 
+# a = [5, 3, 3, 2, 4, 8, 3, 6, 5, 0, 1, 5, 1, 4, 0, 1, 0, 4, 0, 8, 4, 8, 6, 7, 8, 4, 0, 0, 6, 1, 0, 8, 4, 0, 6, 2, 4, 6, 0, 5, 3, 0, 2, 3, 4, 8, 7, 5, 6, 8, 8, 3, 0, 8, 3, 1, 8, 4, 4, 2, 6, 6, 2, 5, 6, 4, 4, 2, 3, 2, 7, 7, 1, 8, 2, 5, 4, 8, 7, 3, 1, 0, 5, 7, 1, 5, 1, 5, 1, 5, 1, 0, 0, 8, 7, 1, 1, 1, 4, 3] 
+
 # ["A","B1","c","e","dad","eeeee"].my_each { |item| puts  item.length }
+# a.my_each {|item| print item}
+# puts a.my_each.is_a?(Enumerator)
+# block = proc { |num| num < 4 }
+# print a.my_each(&block)
+# range = Range.new(5, 50) 
+# print range.my_each(&block)
 
 # 2 ***my_each_with_index
 
