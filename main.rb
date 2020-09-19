@@ -131,7 +131,7 @@ module Enumerable
 
   def my_inject(*args)
     arg1, arg2 = args
-    return 'LocalJumpError ! No block or argument given' if !block_given? && !arg1
+    return yield if !block_given? && !arg1
 
     if block_given?
       accumulator = arg1
