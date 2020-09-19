@@ -62,10 +62,10 @@ module Enumerable
 
   # 5 - my_any? code
 
-  def my_any?(condition = nil)
+  def my_any?(condition = nil, &block)
     my_each do |item|
       if block_given?
-        return true if yield(item)
+        return true if block.call(item)
       elsif condition.class == Class
         return true if item.is_a?(condition)
       elsif condition.class == Regexp
@@ -81,21 +81,8 @@ module Enumerable
 
   # 6 - my_none? code
 
-  def my_none?(condition = nil)
-    my_each do |item|
-      if block_given?
-        return false if yield(item)
-      elsif condition.class == Class
-        return false if item.is_a?(condition)
-      elsif condition.class == Regexp
-        return false if item.match(condition)
-      elsif !block_given? && condition.nil?
-        return false if item
-      elsif !condition.nil?
-        return false if item == condition
-      end
-    end
-    true
+  def my_none?(condition = nil, &block)
+    !my_any?(condition, &block)
   end
 
   # 7 - my_count code
