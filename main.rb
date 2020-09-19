@@ -51,8 +51,10 @@ module Enumerable
         return false unless item.is_a?(condition)
       elsif condition.class == Regexp
         return false unless item.match(condition)
-      elsif item != condition
-        return false
+      elsif !block_given? && condition.nil?
+        return false unless item
+      elsif !condition.nil?
+        return false unless item == condition
       end
     end
     true
@@ -68,8 +70,10 @@ module Enumerable
         return true if item.is_a?(condition)
       elsif condition.class == Regexp
         return true if item.match(condition)
-      elsif (item == condition) || (item && condition.nil?)
-        return true
+      elsif !block_given? && condition.nil?
+        return true if item
+      elsif !condition.nil?
+        return true if item == condition
       end
     end
     false
@@ -85,8 +89,10 @@ module Enumerable
         return false if item.is_a?(condition)
       elsif condition.class == Regexp
         return false if item.match(condition)
-      elsif item && condition.nil?
-        return false
+      elsif !block_given? && condition.nil?
+        return false if item
+      elsif !condition.nil?
+        return false if item == condition
       end
     end
     true
@@ -125,6 +131,7 @@ module Enumerable
 
   def my_inject(*args)
     arg1, arg2 = args
+    return 'LocalJumpError ! No block or argument given' if !block_given? && !arg1
 
     if block_given?
       accumulator = arg1
@@ -141,8 +148,9 @@ module Enumerable
       my_each do |item|
         accumulator = !accumulator ? item : accumulator.send(arg2, item)
       end
-    else return to_enum(:my_inject)
+
     end
+
     accumulator
   end
 end
